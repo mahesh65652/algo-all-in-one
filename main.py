@@ -1,4 +1,4 @@
-🟩 main.py
+# 🟩 main.py
 
 from utils.gsheet import read_google_sheet, update_signal
 from utils.angel_api import get_live_data, place_order
