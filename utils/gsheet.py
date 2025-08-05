@@ -1,8 +1,9 @@
-Google Sheet read/write functions
+# Google Sheet read/write functions
+
 def read_google_sheet():
-    # TODO: Add real implementation
+    # Read data from Google Sheet
     return []
 
-def update_signal(data):
-    # TODO: Push signal to Google Sheet
+def update_signal(sheet_data):
+    # Write signals back to Google Sheet
     pass
