@@ -1,0 +1,8 @@
+Angel One API integration
+def get_live_data(symbol):
+    # TODO: Fetch live price data
+    return {}
+
+def place_order(symbol, signal):
+    # TODO: Place order via Angel One API
+    pass
