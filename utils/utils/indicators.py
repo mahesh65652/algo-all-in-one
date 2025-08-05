@@ -1,4 +1,5 @@
 RSI, EMA, OI calculation functions
-def calculate_indicators(data):
-    # TODO: Add indicator logic here
-    return data
+
+def calculate_indicators(sheet_data):
+    # Perform indicator calculations
+    return sheet_data
