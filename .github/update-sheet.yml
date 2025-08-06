@@ -1,21 +1,27 @@
-name: Push Dummy Data to Google Sheet
+name: Update Google Sheet
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
 
 jobs:
-  push-to-sheet:
+  update-sheet:
     runs-on: ubuntu-latest
-    env:
-      GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
-      - name: Install dependencies
+          python-version: '3.11'
+
+      - name: Install Dependencies
         run: |
           pip install gspread oauth2client
-      - name: Run script
-        run: python update_sheet.py
+
+      - name: Run Python Script
+        env:
+          GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
+        run: |
+          python update_sheet.py
