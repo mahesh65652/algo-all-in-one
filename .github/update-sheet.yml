@@ -1,0 +1,21 @@
+name: Push Dummy Data to Google Sheet
+
+on:
+  workflow_dispatch:
+
+jobs:
+  push-to-sheet:
+    runs-on: ubuntu-latest
+    env:
+      GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          pip install gspread oauth2client
+      - name: Run script
+        run: python update_sheet.py
