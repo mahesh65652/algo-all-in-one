@@ -24,4 +24,4 @@ jobs:
         env:
           GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
         run: |
-          python update_sheet.py
+          python gsheet.py
