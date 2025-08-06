@@ -1,7 +1,10 @@
 name: 🔄 Run GSheet Update
 
 on:
-  workflow_dispatch: # manual trigger
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
 
 jobs:
   update-sheet:
