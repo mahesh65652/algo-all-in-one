@@ -19,6 +19,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Export environment variables from GitHub Secrets
+      run: |
+        echo "GSHEET_CRED_B64=${{ secrets.GSHEET_CRED_B64 }}" >> $GITHUB_ENV
+        echo "GSHEET_ID=${{ secrets.GSHEET_ID }}" >> $GITHUB_ENV
+        echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> $GITHUB_ENV
+        echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> $GITHUB_ENV
+        echo "ANGEL_API_KEY=${{ secrets.ANGEL_API_KEY }}" >> $GITHUB_ENV
+        echo "ANGEL_CLIENT_CODE=${{ secrets.ANGEL_CLIENT_CODE }}" >> $GITHUB_ENV
+        echo "ANGEL_CLIENT_PWD=${{ secrets.ANGEL_CLIENT_PWD }}" >> $GITHUB_ENV
+        echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}" >> $GITHUB_ENV
+
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -29,3 +40,8 @@ jobs:
       run: |
         pip install pytest
         pytest || echo "No tests found, skipping..."
+
+    - name: Run trading bot
+      run: |
+        python main.py
+
