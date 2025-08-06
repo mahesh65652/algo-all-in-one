@@ -1,27 +1,29 @@
-name: Update Google Sheet
+name: 🔄 Run GSheet Update
 
 on:
-  workflow_dispatch:  # Allows manual trigger from GitHub UI
+  workflow_dispatch: # manual trigger
 
 jobs:
   update-sheet:
     runs-on: ubuntu-latest
+    env:
+      GSHEET_ID: ${{ secrets.GSHEET_ID }}
+      GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
     steps:
-      - name: Checkout Repo
+      - name: 🧾 Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: 🐍 Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.10"
 
-      - name: Install Dependencies
-        run: |
-          pip install gspread oauth2client
+      - name: 📦 Install dependencies
+        run: pip install gspread oauth2client requests
 
-      - name: Run Python Script
-        env:
-          GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
-        run: |
-          python gsheet.py
+      - name: ▶️ Run script
+        run: python main.py
+
