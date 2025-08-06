@@ -1,20 +1,11 @@
 name: 🔄 Run GSheet Update
 
 on:
-  push:
-  workflow_dispatch:
-  schedule:
-    - cron: "*/10 * * * *"
+  workflow_dispatch: # manually trigger
 
 jobs:
   update-sheet:
     runs-on: ubuntu-latest
-    env:
-      GSHEET_ID: ${{ secrets.GSHEET_ID }}
-      GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
-      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-
     steps:
       - name: 🧾 Checkout repo
         uses: actions/checkout@v3
@@ -27,6 +18,16 @@ jobs:
       - name: 📦 Install dependencies
         run: pip install gspread oauth2client requests
 
+      - name: 🔐 Export environment variables from GitHub Secrets
+        run: |
+          echo "GSHEET_CRED_B64=${{ secrets.GSHEET_CRED_B64 }}" >> $GITHUB_ENV
+          echo "GSHEET_ID=${{ secrets.GSHEET_ID }}" >> $GITHUB_ENV
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> $GITHUB_ENV
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> $GITHUB_ENV
+          echo "ANGEL_API_KEY=${{ secrets.ANGEL_API_KEY }}" >> $GITHUB_ENV
+          echo "ANGEL_CLIENT_CODE=${{ secrets.ANGEL_CLIENT_CODE }}" >> $GITHUB_ENV
+          echo "ANGEL_CLIENT_PWD=${{ secrets.ANGEL_CLIENT_PWD }}" >> $GITHUB_ENV
+          echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}" >> $GITHUB_ENV
+
       - name: ▶️ Run script
         run: python main.py
-
