@@ -1,5 +1,3 @@
-# 🟩 main.py
-
 from utils.gsheet import read_google_sheet, update_signal
 from utils.angel_api import get_live_data, place_order
 from utils.indicators import calculate_indicators
@@ -8,22 +6,22 @@ from mcx.mcx_data import process_mcx
 from options.option_chain import process_options
 
 if __name__ == "__main__":
+    print("📥 Reading data from Google Sheet...")
     sheet_data = read_google_sheet()
+
+    print("🧮 Calculating indicators...")
     sheet_data = calculate_indicators(sheet_data)
 
+    print("📊 Processing NSE cash stocks...")
     process_nse_cash(sheet_data)
+
+    print("⚙️ Processing MCX data...")
     process_mcx(sheet_data)
+
+    print("📈 Processing options chain...")
     process_options(sheet_data)
 
+    print("📤 Updating Google Sheet with signals...")
     update_signal(sheet_data)
 
-# 🟩 main.py
-
-from utils.gsheet import update_signal
-
-if __name__ == "__main__":
-    sample_data = [
-        {"symbol": "KOMAL", "price": 999.0},
-        {"symbol": "NSDL", "price": 930.0},
-    ]
-    update_signal(sample_data)
+    print("✅ All tasks completed.")
