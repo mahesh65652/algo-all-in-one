@@ -1,33 +1,36 @@
-name: 🔄 Run GSheet Update
+name: 🔄 GSheet + Trading Automation
 
 on:
-  workflow_dispatch: # manually trigger
+  workflow_dispatch:  # ⏯️ Manual run from GitHub Actions UI
+  push:               # 🔄 Automatically run on push (optional, you can remove if not needed)
 
 jobs:
   update-sheet:
     runs-on: ubuntu-latest
+
+    env:
+      GSHEET_ID: ${{ secrets.GSHEET_ID }}
+      GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      ANGEL_API_KEY: ${{ secrets.ANGEL_API_KEY }}
+      ANGEL_CLIENT_CODE: ${{ secrets.ANGEL_CLIENT_CODE }}
+      ANGEL_CLIENT_PWD: ${{ secrets.ANGEL_CLIENT_PWD }}
+      ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
+
     steps:
       - name: 🧾 Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🐍 Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
-      - name: 📦 Install dependencies
-        run: pip install gspread oauth2client requests
-
-      - name: 🔐 Export environment variables from GitHub Secrets
+      - name: 📦 Install Python dependencies
         run: |
-          echo "GSHEET_CRED_B64=${{ secrets.GSHEET_CRED_B64 }}" >> $GITHUB_ENV
-          echo "GSHEET_ID=${{ secrets.GSHEET_ID }}" >> $GITHUB_ENV
-          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> $GITHUB_ENV
-          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> $GITHUB_ENV
-          echo "ANGEL_API_KEY=${{ secrets.ANGEL_API_KEY }}" >> $GITHUB_ENV
-          echo "ANGEL_CLIENT_CODE=${{ secrets.ANGEL_CLIENT_CODE }}" >> $GITHUB_ENV
-          echo "ANGEL_CLIENT_PWD=${{ secrets.ANGEL_CLIENT_PWD }}" >> $GITHUB_ENV
-          echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}" >> $GITHUB_ENV
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: ▶️ Run script
+      - name: ▶️ Run main.py
         run: python main.py
