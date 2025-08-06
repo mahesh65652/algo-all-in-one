@@ -5,7 +5,7 @@ import os
 import json
 import base64
 
-# --- Setup credentials from B64 Secret ---
+# --- Step 1: Auth with base64 credentials ---
 creds_b64 = os.environ["GSHEET_CRED_B64"]
 creds_json = base64.b64decode(creds_b64).decode("utf-8")
 creds_dict = json.loads(creds_json)
@@ -14,25 +14,28 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(credentials)
 
-# --- Open Sheet and Worksheet ---
+# --- Step 2: Open sheet ---
 sheet = client.open("AllinoneSheet")
-ws = sheet.worksheet("LIVE_DATA")
 
-# --- Define expected headers ---
-headers = ["SYMBOL", "PRICE", "TIME"]
+# --- Step 3: Try to open LIVE_DATA sheet, else create it ---
+try:
+    ws = sheet.worksheet("LIVE_DATA")
+except gspread.exceptions.WorksheetNotFound:
+    ws = sheet.add_worksheet(title="LIVE_DATA", rows="1000", cols="10")
 
-# --- Check if headers exist, if not insert them ---
-existing = ws.row_values(1)
-if existing != headers:
-    ws.resize(rows=1)  # clear previous junk rows
-    ws.update("A1", [headers])  # insert headers in 1st row
+# --- Step 4: Add headers if not present ---
+expected_headers = ["SYMBOL", "PRICE", "TIME"]
+current_headers = ws.row_values(1)
 
-# --- Sample Data (replace with real-time data later) ---
+if current_headers != expected_headers:
+    ws.resize(rows=1)
+    ws.update("A1", [expected_headers])
+
+# --- Step 5: Add real or dummy row ---
 symbol = "NSDL"
-price = 930.00
-time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+price = 930
+now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-row = [symbol, price, time_now]
-ws.append_row(row)
+ws.append_row([symbol, price, now])
 
-print("✅ LIVE_DATA updated with real entry")
+print("✅ LIVE_DATA sheet created or updated successfully.")
