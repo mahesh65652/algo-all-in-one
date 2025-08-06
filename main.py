@@ -17,3 +17,13 @@ if __name__ == "__main__":
 
     update_signal(sheet_data)
 
+# 🟩 main.py
+
+from utils.gsheet import update_signal
+
+if __name__ == "__main__":
+    sample_data = [
+        {"symbol": "KOMAL", "price": 999.0},
+        {"symbol": "NSDL", "price": 930.0},
+    ]
+    update_signal(sample_data)
