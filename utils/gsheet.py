@@ -1,3 +1,9 @@
+import os
+import base64
+import gspread
+import requests
+from datetime import datetime
+from oauth2client.service_account import ServiceAccountCredentials
 def update_trade_log(symbol, price, side="SELL"):
     creds_b64 = os.environ.get("GSHEET_CRED_B64")
     sheet_id = os.environ.get("GSHEET_ID")
