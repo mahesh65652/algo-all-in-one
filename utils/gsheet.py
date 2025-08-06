@@ -1,29 +1,38 @@
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 import os
 import json
 import base64
-import gspread
-from datetime import datetime
-from oauth2client.service_account import ServiceAccountCredentials
 
-# Step 1: Decode base64 credentials
-creds_b64 = os.environ.get("GSHEET_CRED_B64")
+# --- Setup credentials from B64 Secret ---
+creds_b64 = os.environ["GSHEET_CRED_B64"]
 creds_json = base64.b64decode(creds_b64).decode("utf-8")
 creds_dict = json.loads(creds_json)
 
-# Step 2: Google Sheets auth
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-client = gspread.authorize(creds)
+credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+client = gspread.authorize(credentials)
 
-# Step 3: Open your Google Sheet
-sheet = client.open("AllInOneSheet")
+# --- Open Sheet and Worksheet ---
+sheet = client.open("AllinoneSheet")
+ws = sheet.worksheet("LIVE_DATA")
 
-# Step 4: Dummy entry in LIVE_DATA
-now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-data_row = [now, "TCS", 3870.50, "+0.52%", 175000]
+# --- Define expected headers ---
+headers = ["SYMBOL", "PRICE", "TIME"]
 
-sheet.worksheet("LIVE_DATA").append_row(data_row)
+# --- Check if headers exist, if not insert them ---
+existing = ws.row_values(1)
+if existing != headers:
+    ws.resize(rows=1)  # clear previous junk rows
+    ws.update("A1", [headers])  # insert headers in 1st row
 
-# Also log in DEBUG_LOGS
-sheet.worksheet("DEBUG_LOGS").append_row([now, "TEST_PUSH", "Dummy LTP pushed successfully"])
+# --- Sample Data (replace with real-time data later) ---
+symbol = "NSDL"
+price = 930.00
+time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+row = [symbol, price, time_now]
+ws.append_row(row)
+
+print("✅ LIVE_DATA updated with real entry")
