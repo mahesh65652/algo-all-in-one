@@ -2,8 +2,10 @@ name: Python Trading Bot
 
 on:
   push:
+    branches:
+      - main
   schedule:
-    - cron: '30 3 * * 1-5'  # Mon–Fri at 9:00 AM IST (3:30 UTC)
+    - cron: '30 3 * * 1-5'  # Mon–Fri at 9:00 AM IST
 
 jobs:
   build-linux:
@@ -51,3 +53,4 @@ jobs:
     - name: Run trading bot
       run: |
         python main.py
+
