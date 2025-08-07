@@ -8,7 +8,7 @@ from datetime import datetime
 def update_signal(data):
     print("📤 Sheet update data:", data)
 
-    # 1️⃣ Decode credentials
+    # 1️⃣ Decode credentials from Base64
     creds_b64 = os.environ.get("GSHEET_CRED_B64")
     creds_json = base64.b64decode(creds_b64).decode("utf-8")
 
@@ -30,23 +30,23 @@ def update_signal(data):
     except gspread.exceptions.WorksheetNotFound:
         sheet = spreadsheet.add_worksheet(title="LIVE_DATA", rows="100", cols="10")
 
-    # 5️⃣ Clear & write headers
+    # 5️⃣ Clear sheet & write headers
     sheet.clear()
     sheet.append_row(["Symbol", "Signal", "Price", "Time"])
 
-    # 6️⃣ Fill data rows
+    # 6️⃣ Add signal rows (fixing key names!)
     for row in data:
         sheet.append_row([
-            row.get("Symbol"),
-            row.get("Signal"),
-            row.get("Price"),
+            row.get("symbol"),
+            row.get("signal"),
+            row.get("price"),
             datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         ])
 
     # 7️⃣ Clean up
     os.remove("temp_creds.json")
 
-    # 8️⃣ Telegram notification
+    # 8️⃣ Telegram notify
     bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID")
 
@@ -65,4 +65,3 @@ def update_signal(data):
         print("📬 Telegram sent")
     else:
         print("❌ Telegram failed:", res.text)
-
