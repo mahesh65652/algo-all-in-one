@@ -1,39 +1,40 @@
-name: 🔁 Auto Trading Bot (Daily)
+name: Run Trading Bot (Scheduled)
 
 on:
   schedule:
-    - cron: '40 3 * * 1-5'  # Runs every weekday at 9:10 AM IST (which is 3:40 UTC)
-  workflow_dispatch:  # Also allow manual run from GitHub UI
+    - cron: '30 3 * * 1-5'  # Run Mon-Fri at 09:00 AM IST (03:30 UTC)
+  workflow_dispatch:
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📁 Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: 🐍 Set up Python 3.10
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
 
-    - name: 📦 Install Python dependencies
-      run: |
-        pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: 🔐 Export environment variables from GitHub Secrets
-      run: |
-        echo "GSHEET_CRED_B64=${{ secrets.GSHEET_CRED_B64 }}" >> $GITHUB_ENV
-        echo "GSHEET_ID=${{ secrets.GSHEET_ID }}" >> $GITHUB_ENV
-        echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> $GITHUB_ENV
-        echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> $GITHUB_ENV
-        echo "ANGEL_API_KEY=${{ secrets.ANGEL_API_KEY }}" >> $GITHUB_ENV
-        echo "ANGEL_CLIENT_CODE=${{ secrets.ANGEL_CLIENT_CODE }}" >> $GITHUB_ENV
-        echo "ANGEL_CLIENT_PWD=${{ secrets.ANGEL_CLIENT_PWD }}" >> $GITHUB_ENV
-        echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}" >> $GITHUB_ENV
+      - name: Export secrets safely
+        run: |
+          echo "GSHEET_CRED_B64=${{ secrets.GSHEET_CRED_B64 }}" >> $GITHUB_ENV
+          echo "GSHEET_ID=${{ secrets.GSHEET_ID }}" >> $GITHUB_ENV
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> $GITHUB_ENV
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> $GITHUB_ENV
+          echo "ANGEL_API_KEY=${{ secrets.ANGEL_API_KEY }}" >> $GITHUB_ENV
+          echo "ANGEL_CLIENT_CODE=${{ secrets.ANGEL_CLIENT_CODE }}" >> $GITHUB_ENV
+          echo "ANGEL_CLIENT_PWD=${{ secrets.ANGEL_CLIENT_PWD }}" >> $GITHUB_ENV
+          echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}" >> $GITHUB_ENV
 
-    - name: ▶️ Run trading bot
-      run: python main.py
+      - name: Run Trading Bot
+        run: |
+          python main.py
 
