@@ -1,7 +1,35 @@
-✅ VSCode settings
+✅ VSCode project settings
 .vscode/
 
-# ✅ AL Project folders
+# ✅ Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# ✅ Environment and secret files
+.env
+*.env
+.env.*
+temp_creds.json
+
+# ✅ Output or temp folders
+output/
+dist/
+build/
+*.log
+*.tmp
+
+# ✅ Jupyter notebook checkpoints (अगर आप notebooks यूज़ करते हैं)
+.ipynb_checkpoints/
+
+# ✅ MacOS system files
+.DS_Store
+
+# ✅ Windows system files
+Thumbs.db
+desktop.ini
+
+# ✅ AL Project folders (if using Business Central / Dynamics)
 .alcache/
 .alpackages/
 .snapshots/
@@ -12,17 +40,3 @@ rad.json
 *.flf
 TestResults.xml
 
-# ✅ Python cache
-__pycache__/
-*.pyc
-*.pyo
-
-# ✅ Environment files
-.env
-*.env
-.env.*
-temp_creds.json
-
-# ✅ OS specific
-.DS_Store
-Thumbs.db
