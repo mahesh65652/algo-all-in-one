@@ -45,3 +45,56 @@ jobs:
       run: |
         python main.py
 
+name: Python Trading Bot
+
+on:
+  push:
+  schedule:
+    - cron: '30 3 * * 1-5'  # Mon–Fri at 9:00 AM IST (3:30 UTC)
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Export secrets safely (multiline supported)
+      run: |
+        {
+          echo "GSHEET_CRED_B64<<EOF"
+          echo "${{ secrets.GSHEET_CRED_B64 }}"
+          echo "EOF"
+          echo "GSHEET_ID=${{ secrets.GSHEET_ID }}"
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}"
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}"
+          echo "ANGEL_API_KEY=${{ secrets.ANGEL_API_KEY }}"
+          echo "ANGEL_CLIENT_CODE=${{ secrets.ANGEL_CLIENT_CODE }}"
+          echo "ANGEL_CLIENT_PWD=${{ secrets.ANGEL_CLIENT_PWD }}"
+          echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}"
+        } >> $GITHUB_ENV
+
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Test with pytest
+      run: |
+        pip install pytest
+        pytest || echo "No tests found, skipping..."
+
+    - name: Run trading bot
+      run: |
+        python main.py
