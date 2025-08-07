@@ -5,9 +5,12 @@ from nse.cash_stocks import process_nse_cash
 from mcx.mcx_data import process_mcx
 from options.option_chain import process_options
 
-if __name__ == "__main__":
+def main():
     print("📥 Reading data from Google Sheet...")
     sheet_data = read_google_sheet()
+    if not sheet_data:
+        print("❌ Sheet data is empty. Exiting.")
+        return
 
     print("🧮 Calculating indicators...")
     sheet_data = calculate_indicators(sheet_data)
@@ -25,3 +28,6 @@ if __name__ == "__main__":
     update_signal(sheet_data)
 
     print("✅ All tasks completed.")
+
+if __name__ == "__main__":
+    main()
