@@ -24,21 +24,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Export secrets safely (multiline supported)
-      run: |
-        {
-          echo "GSHEET_CRED_B64<<EOF"
-          echo "${{ secrets.GSHEET_CRED_B64 }}"
-          echo "EOF"
-          echo "GSHEET_ID=${{ secrets.GSHEET_ID }}"
-          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}"
-          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}"
-          echo "ANGEL_API_KEY=${{ secrets.ANGEL_API_KEY }}"
-          echo "ANGEL_CLIENT_CODE=${{ secrets.ANGEL_CLIENT_CODE }}"
-          echo "ANGEL_CLIENT_PWD=${{ secrets.ANGEL_CLIENT_PWD }}"
-          echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}"
-        } >> $GITHUB_ENV
-
     - name: Lint with flake8
       run: |
         pip install flake8
@@ -51,6 +36,14 @@ jobs:
         pytest || echo "No tests found, skipping..."
 
     - name: Run trading bot
+      env:
+        GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
+        GSHEET_ID: ${{ secrets.GSHEET_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        ANGEL_API_KEY: ${{ secrets.ANGEL_API_KEY }}
+        ANGEL_CLIENT_CODE: ${{ secrets.ANGEL_CLIENT_CODE }}
+        ANGEL_CLIENT_PWD: ${{ secrets.ANGEL_CLIENT_PWD }}
+        ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
       run: |
         python main.py
-
