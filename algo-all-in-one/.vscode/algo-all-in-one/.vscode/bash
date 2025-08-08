@@ -1,3 +1,0 @@
-git add .gitignore example.env .vscode/settings.json
-git commit -m "✅ Initial project setup with .gitignore, env example & VSCode settings"
-git push origin main
