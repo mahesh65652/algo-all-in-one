@@ -9,14 +9,14 @@ jobs:
   update-sheet:
     runs-on: ubuntu-latest
     env:
-      GSHEET_ID: ${{ secrets.GSHEET_ID }}
+      GSHEET_ID: ${{ secrets.SHEET_ID }}
       GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      ANGEL_API_KEY: ${{ secrets.ANGEL_API_KEY }}
-      ANGEL_CLIENT_CODE: ${{ secrets.ANGEL_CLIENT_CODE }}
-      ANGEL_CLIENT_PWD: ${{ secrets.ANGEL_CLIENT_PWD }}
-      ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
+      ANGEL_API_KEY: ${{ secrets.API_KEY }}
+      ANGEL_CLIENT_CODE: ${{ secrets.CLIENT_CODE }}
+      ANGEL_CLIENT_PWD: ${{ secrets.CLIENT_PWD }}
+      ANGEL_TOTP_SECRET: ${{ secrets.TOTP }}
 
     steps:
       - name: 🧾 Checkout repo
@@ -34,18 +34,14 @@ jobs:
 
       - name: 🔐 Export environment variables from secrets (safe)
         run: |
-          {
-            echo "GSHEET_CRED_B64<<EOF"
-            echo "${{ secrets.GSHEET_CRED_B64 }}"
-            echo "EOF"
-            echo "GSHEET_ID=${{ secrets.GSHEET_ID }}"
-            echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}"
-            echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}"
-            echo "ANGEL_API_KEY=${{ secrets.ANGEL_API_KEY }}"
-            echo "ANGEL_CLIENT_CODE=${{ secrets.ANGEL_CLIENT_CODE }}"
-            echo "ANGEL_CLIENT_PWD=${{ secrets.ANGEL_CLIENT_PWD }}"
-            echo "ANGEL_TOTP_SECRET=${{ secrets.ANGEL_TOTP_SECRET }}"
-          } >> $GITHUB_ENV
+          echo "GSHEET_CRED_B64=${{ secrets.GSHEET_CRED_B64 }}" >> $GITHUB_ENV
+          echo "GSHEET_ID=${{ secrets.SHEET_ID }}" >> $GITHUB_ENV
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> $GITHUB_ENV
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> $GITHUB_ENV
+          echo "ANGEL_API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+          echo "ANGEL_CLIENT_CODE=${{ secrets.CLIENT_CODE }}" >> $GITHUB_ENV
+          echo "ANGEL_CLIENT_PWD=${{ secrets.CLIENT_PWD }}" >> $GITHUB_ENV
+          echo "ANGEL_TOTP_SECRET=${{ secrets.TOTP }}" >> $GITHUB_ENV
 
       - name: ▶️ Run main.py
         run: python main.py
