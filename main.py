@@ -7,7 +7,7 @@ import os
 
 if __name__ == "__main__":
     SHEET_ID = os.environ.get("GSHEET_ID")
-    SHEET_NAME = "Sheet1"  # जरूरत हो तो बदल सकते हो
+    SHEET_NAME = "LIVE DATA"  # जरूरत हो तो बदल सकते हो
 
     print("📥 Reading data from Google Sheet...")
     sheet_data = read_google_sheet(SHEET_ID, SHEET_NAME)
