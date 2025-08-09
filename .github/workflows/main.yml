@@ -1,9 +1,7 @@
 name: Python Trading Bot
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:   # अब मैन्युअली रन कर सकते हो
   schedule:
     - cron: '30 3 * * 1-5'  # Mon–Fri at 9:00 AM IST
 
