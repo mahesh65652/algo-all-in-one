@@ -22,4 +22,4 @@ if __name__ == "__main__":
     update_signal(SHEET_ID, SHEET_NAME, "J2", nse_signals)  
     # "J2" वो cell range है जहाँ से signals लिखने हैं
 
-    print("✅ NSE strategy completed successfully
+    print("✅ NSE strategy completed successfully")
