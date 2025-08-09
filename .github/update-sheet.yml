@@ -45,3 +45,43 @@ jobs:
 
       - name: ▶️ Run main.py
         run: python main.py
+
+name: 🔄 Run GSheet Update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 3 * * 1-5'
+
+jobs:
+  update-sheet:
+    runs-on: ubuntu-latest
+    env:
+      GSHEET_ID: ${{ secrets.SHEET_ID }}
+      GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      ANGEL_API_KEY: ${{ secrets.API_KEY }}
+      ANGEL_CLIENT_CODE: ${{ secrets.CLIENT_CODE }}
+      ANGEL_CLIENT_PWD: ${{ secrets.CLIENT_PWD }}
+      ANGEL_TOTP_SECRET: ${{ secrets.TOTP }}
+
+    steps:
+      - name: 🧾 Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: 📦 Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: 🔑 Decode Google Sheets credentials
+        run: |
+          echo "$GSHEET_CRED_B64" | base64 -d > gsheet-creds.json
+        shell: bash
+
+      - name: ▶️ Run main.py
+        run: python main.py
