@@ -1,3 +1,24 @@
+TEST_MODE = True
+
+def fetch_gsheet_data():
+    if TEST_MODE:
+        return [
+            ["Symbol", "Open", "High", "Low", "Close", "Time"],
+            ["INFY",  1500, 1510, 1495, 1508, "2025-08-09 09:20:00"],
+            ["INFY",  1508, 1515, 1500, 1516, "2025-08-09 09:25:00"],
+            ["TCS",   3450, 3465, 3440, 3438, "2025-08-09 09:20:00"],
+            ["TCS",   3438, 3445, 3420, 3418, "2025-08-09 09:25:00"]
+        ]
+    else:
+        # यहां Google Sheets से data लाने का असली code होगा
+        pass
+
+if __name__ == "__main__":
+    sheet_data = fetch_gsheet_data()
+    signals = process_nse_cash(sheet_data)
+    print(signals)
+
+
 process_nse_cash(sheet_data)
 
 def process_nse_cash(sheet_data):
