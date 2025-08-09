@@ -3,7 +3,6 @@
 This repo contains full automation for:
 
 - ✅ NSE Cash Stocks
-- ✅ MCX
 - ✅ NSE Options
 - ✅ Google Sheet Updates
 - ✅ Telegram Notifications
