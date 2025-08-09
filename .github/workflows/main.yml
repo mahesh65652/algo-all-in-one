@@ -1,9 +1,9 @@
 name: Python Trading Bot
 
 on:
-  workflow_dispatch:   # अब मैन्युअली रन कर सकते हो
+  workflow_dispatch:
   schedule:
-    - cron: '30 3 * * 1-5'  # Mon–Fri at 9:00 AM IST
+    - cron: '30 3 * * 1-5'
 
 jobs:
   build-linux:
@@ -33,9 +33,12 @@ jobs:
         pip install pytest
         pytest || echo "No tests found, skipping..."
 
+    - name: Decode Google Sheets Credentials
+      run: |
+        echo "$GSHEET_CRED_B64" | base64 -d > gsheet-creds.json
+
     - name: Run trading bot
       env:
-        GSHEET_CRED_B64: ${{ secrets.GSHEET_CRED_B64 }}
         GSHEET_ID: ${{ secrets.GSHEET_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -45,3 +48,4 @@ jobs:
         ANGEL_TOTP_SECRET: ${{ secrets.ANGEL_TOTP_SECRET }}
       run: |
         python main.py
+
